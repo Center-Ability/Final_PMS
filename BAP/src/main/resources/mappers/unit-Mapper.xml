@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bap.mappers.unit-Mapper">
+	
+	<select id="list" resultType="com.bap.domain.UnitVO">
+		select 
+			*
+		from unit
+		
+	</select>
+	
+	<insert id="create">
+		insert into
+			unit(unit_title, mem_id, unit_content, unit_start, unit_end, pro_num)
+		values
+			(#{unit_title}, #{mem_id}, #{unit_content}, #{unit_start}, #{unit_end}, #{pro_num})
+	</insert>
+	
+	<select id="team" resultType="com.bap.domain.UnitTeam">
+		select
+			*
+		from
+			unitteam_view
+		where
+			pro_num = #{pro_num}
+	</select>
+	
+	<delete id="deleteUnit">
+		delete from
+			UNIT
+		where
+			unit_no = #{unit_no}
+	</delete>
+	
+	<select id="detail" resultType="com.bap.dto.UnitDTO">
+		select 
+			*
+		from
+			unitlist_view
+		where
+			pro_num = #{pro_num}
+	</select>
+	
+	<select id="searchPro_titleById" resultType="String">
+		select
+			pro_name
+		from
+			pro
+		where
+			pro_num = #{pro_num}
+	</select>
+	
+	
+</mapper>
+
+
+
+
+
+
+	

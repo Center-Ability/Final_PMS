@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bap.mappers.doc-Mapper">
+
+<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">
+				and doc_title like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'c'.toString()">
+				and doc_content like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'w'.toString()">
+				and mem_name like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'tc'.toString()">
+				and ( doc_title like '%'||#{keyword}||'%' OR doc_content like '%'||#{keyword}||'%')
+			</if>
+			<if test="searchType == 'cw'.toString()">
+				and ( doc_content like '%'||#{keyword}||'%' OR mem_name like '%'||#{keyword}||'%')
+			</if>
+		</if>
+	</sql>
+	
+	<select id="listSearch" resultType="com.bap.dto.DoclistDTO">
+		<![CDATA[
+		select 
+			*
+		from 
+			doclist_view
+		where
+			doc_no > 0
+		]]>
+
+		<include refid="search"></include>
+	
+		<![CDATA[
+		order by 
+			doc_no desc
+		]]>
+	</select>
+	
+		<select id="listSearchCount" resultType="int">
+		<![CDATA[
+		select 
+			count(doc_no)
+		from 
+			doclist_view
+		where
+			doc_no > 0
+		]]>
+	
+		<include refid="search"></include>
+	
+		<![CDATA[
+		order by 
+			doc_no desc
+		]]>
+	</select>
+   
+   <insert id="createDoc">
+      insert into
+         DOC(doc_title, mem_id, doc_content, pro_num)
+      values(
+         #{doc_title},#{mem_id},#{doc_content},#{pro_num}
+      )
+   </insert>
+   
+   <select id="search_latest_doc_no" resultType="Integer">
+      select
+         MAX(doc_no)
+      from
+         doc
+   </select>
+   
+   <insert id="createDocAttach">
+      insert into
+         DOC_ATTACH(doc_attach_title, doc_no)
+      values(
+         #{doc_attach_title},#{doc_no}
+      )
+   </insert>
+   
+   <select id="selectDoc" resultType="com.bap.domain.DocVO">
+      select
+         *
+      from
+         DOC
+      where
+         doc_no = #{doc_no}
+   </select>
+   
+   <select id="detailViewFileData" resultType="com.bap.domain.DocAttachVO">
+      <![CDATA[
+         select
+            *
+         from
+            DOC_ATTACH
+         where
+            doc_no = #{doc_no}
+      ]]>
+   </select>
+   
+ 
+</mapper>
+
+
+
+
+
+
+   
